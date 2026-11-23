@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SOS Relief</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#b3261e">
+<link rel="icon" href="icon.svg"><link rel="stylesheet" href="styles-v2.css"></head>
+<body data-page="citizen">
+<header><h1>Emergency SOS</h1><a href="dashboard.html">Responder view</a></header>
+<main>
+<section class="hero"><div><p class="eyebrow">DISASTER RELIEF · RANCHI</p><h2>Get help when every second counts</h2><p>Share your location with responders or call help directly.</p></div><button type="button" class="sos hero-sos" id="quick-sos">🚨 Send SOS now</button><small>Uses your current coordinates and the details below.</small></section>
+<div id="net" class="badge on" role="status">Online</div>
+<div id="pending" class="gps"></div>
+<section><h2>Request help</h2>
+<form id="sos-form">
+<label for="hazard">What is happening?</label>
+<select id="hazard" required>
+<option>Medical Emergency</option><option>Structural Collapse / Trapped</option><option>Flood / Rising Water</option>
+<option>Food &amp; Potable Water Shortage</option><option>Fire</option></select>
+<label for="people">People stranded</label><input id="people" type="number" min="1" value="1" required>
+<div class="row"><div><label for="name">Name (optional)</label><input id="name" autocomplete="name"></div>
+<div><label for="contact">Phone (optional)</label><input id="contact" type="tel" autocomplete="tel"></div></div>
+<label for="note">Short note</label><textarea id="note" rows="2" maxlength="500"></textarea>
+<div class="row"><div><label for="lat">Latitude</label><input id="lat" type="number" step="any" required></div>
+<div><label for="lon">Longitude</label><input id="lon" type="number" step="any" required></div></div>
+<div class="gps" id="gps">Locating…</div>
+<button type="button" class="sec" id="refresh-gps">Refresh coordinates</button>
+<button type="submit" class="sos">SEND SOS</button>
+<button type="button" class="sec" id="sms">Send via standard SMS</button>
+</form></section>
+<section id="call-help"><h2>Call for help</h2><p class="hint">Tap a number to call from your phone.</p><div class="call-grid">
+<a class="call-card urgent" href="tel:112"><span class="call-icon">🆘</span><span><b>Emergency helpline</b><small>Police · Fire · Ambulance</small></span><strong>112</strong></a>
+<a class="call-card" href="tel:100"><span class="call-icon">🚓</span><span><b>Police</b><small>Emergency assistance</small></span><strong>100</strong></a>
+<a class="call-card" href="tel:108"><span class="call-icon">🚑</span><span><b>Ambulance</b><small>Medical emergency</small></span><strong>108</strong></a>
+<a class="call-card" href="tel:101"><span class="call-icon">🚒</span><span><b>Fire service</b><small>Fire and rescue</small></span><strong>101</strong></a>
+</div><div class="contacts-head"><h3>People you trust</h3><button type="button" class="sec compact" id="add-contact">＋ Add contact</button></div><div id="contacts" class="contacts"><p class="hint">Add a relative or trusted contact for quick calling from this device.</p></div><form id="contact-form" class="contact-form" hidden><label for="relative-name">Name</label><input id="relative-name" required maxlength="60" placeholder="e.g. Family member"><label for="relative-phone">Phone number</label><input id="relative-phone" type="tel" required autocomplete="tel" placeholder="e.g. +91 98765 43210"><div class="row"><button class="sec" id="cancel-contact" type="button">Cancel</button><button class="add-btn" type="submit">Save contact</button></div></form></section>
+<section><div class="section-title"><div><h2>Nearby shelters and hospitals</h2><p class="hint">Sorted by distance from your current location.</p></div><button type="button" class="sec compact" id="nearby-refresh">↻ Update</button></div><div id="shelters">Loading…</div><div class="map-wrap"><div class="map-label"><b id="map-title">Nearby help map</b><span id="map-caption">Choose a shelter or hospital to view it here.</span></div><iframe id="nearby-map" title="Map of nearby shelters and hospitals" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Ranchi%20shelters%20hospitals&z=12&output=embed"></iframe></div></section>
+</main><div id="toast" role="alert"></div><script src="app-v2.js"></script></body></html>

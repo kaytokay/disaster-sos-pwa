@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Triage Dashboard</title>
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg"><link rel="stylesheet" href="styles-v2.css"></head>
+<body data-page="dashboard">
+<header><h1>Triage dashboard</h1><a href="index.html">Citizen view</a></header>
+<main class="wide">
+<div class="stats" id="stats"></div>
+<button class="sec" id="reload" style="max-width:200px">Refresh now</button>
+<section class="tw"><table><thead><tr><th>Urgency</th><th>Hazard</th><th>People</th><th>Details</th><th>Received</th><th>Map</th><th>Status</th></tr></thead>
+<tbody id="feed"><tr><td colspan="7">No reports yet.</td></tr></tbody></table></section>
+</main><div id="toast" role="alert"></div><script src="app-v2.js"></script></body></html>

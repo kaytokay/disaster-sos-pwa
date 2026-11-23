@@ -1,0 +1,7 @@
+[
+  {"name":"Ranchi Relief Camp - Morabadi Ground","type":"Shelter","lat":23.3700,"lon":85.3400,"capacity":800,"phone":"0651-2214001","phone_label":"District disaster guidance","direct_phone":false},
+  {"name":"RIMS Emergency Wing","type":"Hospital","lat":23.3969,"lon":85.3687,"capacity":300,"phone":"0651-2544471","phone_label":"Emergency desk","direct_phone":true},
+  {"name":"Sadar Hospital Ranchi","type":"Hospital","lat":23.3441,"lon":85.3096,"capacity":200,"phone":"9709016627","phone_label":"Hospital contact","direct_phone":true},
+  {"name":"Dhurwa Community Hall","type":"Relief Centre","lat":23.3120,"lon":85.2790,"capacity":400,"phone":"0651-2214001","phone_label":"District disaster guidance","direct_phone":false},
+  {"name":"Kanke Road School Shelter","type":"Shelter","lat":23.4167,"lon":85.3333,"capacity":350,"phone":"0651-2214001","phone_label":"District disaster guidance","direct_phone":false}
+]
