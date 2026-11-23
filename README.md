@@ -6,13 +6,16 @@ This project contains a browser-based citizen app, a responder dashboard, and a 
 
 Run `start.bat` and choose **Install everything**, then choose a page to open. The local database is `backend/sos.db` and is excluded from Git.
 
-## Deploy on Render
+## Free demo deployment (Render + Supabase)
 
 1. Push this project to a GitHub repository. `.gitignore` excludes the local virtual environment, Python cache files, local database, and `.env` secrets.
-2. In Render, create a PostgreSQL database and a Web Service connected to the repository. Render can also read the settings in `render.yaml` as a Blueprint.
-3. Set the service's `DATABASE_URL` to the database's **internal** connection URL. Set `ADMIN_USERNAME` and a long, unique `ADMIN_PASSWORD` in Render's environment settings. Do not commit these values.
-4. Deploy. The service uses the commands in `render.yaml`; check `/api/health` on its HTTPS URL. The citizen pages and API share that origin.
-5. Open `/dashboard.html`; the browser will request the responder credentials. The reports API, statistics, status updates, and dashboard page are protected. Citizen report submissions remain public by design.
+2. Create a Supabase project on its Free plan. Choose a region near the Render service (Singapore is a good choice for India).
+3. In Supabase, open **Connect** and copy the **Session pooler** connection string. Use this pooler rather than the direct connection because Render's network is IPv4-only. Add `sslmode=require` to the URL if it is not already present.
+4. In Render, create a Web Service connected to the repository, choose the **Free** plan, and use the same region as Supabase. Or import `render.yaml` as a Blueprint; it explicitly sets the service plan to Free.
+5. Set `DATABASE_URL` to the Supabase Session pooler string and set `ADMIN_USERNAME` plus a long, unique `ADMIN_PASSWORD` in Render's environment settings. Keep these secrets out of GitHub.
+6. Deploy and check `/api/health` on the HTTPS service URL. The citizen pages and API share that origin. Open `/dashboard.html`; the browser will request the responder credentials.
+
+Free tiers have limits: Render's Free web service sleeps after 15 minutes without traffic and may take about a minute to wake. Supabase Free projects can pause after a week of low activity and have no automatic backups. This setup is for a $0 demo, not a service people rely on during an emergency.
 
 Production startup fails if the app is missing its PostgreSQL URL or responder credentials. The local launcher keeps using SQLite unless `DATABASE_URL` is set.
 
