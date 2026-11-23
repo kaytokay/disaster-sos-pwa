@@ -1,5 +1,5 @@
 // Bump this whenever the app shell changes so installed PWAs replace old assets.
-const CACHE = "sos-shell-v6";
+const CACHE = "sos-shell-v7";
 const SHELL = ["/", "/index.html", "/index-online.html", "/styles.css", "/styles-v2.css", "/app.js", "/app-v2.js", "/manifest.json", "/icon.svg", "/shelters.json", "/shelters-v2.json"];
 
 self.addEventListener("install", e => {

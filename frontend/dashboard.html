@@ -1,11 +1,11 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Triage Dashboard</title>
-<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg"><link rel="stylesheet" href="styles-v2.css"></head>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#ffffff"><meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)"><link rel="icon" href="icon.svg"><link rel="stylesheet" href="styles-v2.css"></head>
 <body data-page="dashboard">
-<header><h1>Triage dashboard</h1><a href="index.html">Citizen view</a></header>
+<header><a class="brand" href="dashboard.html"><span class="brand-mark" aria-hidden="true">S</span><h1>Responder dashboard</h1></a><a href="index.html">Citizen view <span aria-hidden="true">→</span></a></header>
 <main class="wide">
+<div class="dashboard-heading"><div><p class="eyebrow">RESPONSE CENTER · RANCHI</p><h2>Incident overview</h2><p class="hint">Incoming SOS reports and rescue status.</p></div><button class="sec compact" id="reload">Refresh reports</button></div>
 <div class="stats" id="stats"></div>
-<button class="sec" id="reload" style="max-width:200px">Refresh now</button>
 <section class="tw"><table><thead><tr><th>Urgency</th><th>Hazard</th><th>People</th><th>Details</th><th>Received</th><th>Map</th><th>Status</th></tr></thead>
 <tbody id="feed"><tr><td colspan="7">No reports yet.</td></tr></tbody></table></section>
 </main><div id="toast" role="alert"></div><script src="app-v2.js"></script></body></html>
