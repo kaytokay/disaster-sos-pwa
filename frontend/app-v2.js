@@ -116,21 +116,34 @@ async function renderShelters() {
   const el = $("shelters"), lat = +$("lat").value, lon = +$("lon").value, has = $("lat").value && $("lon").value;
   try {
     let list = await (await fetch("shelters-v2.json")).json();
-    if (has) list = list.map(s => ({ ...s, d: km(lat, lon, s.lat, s.lon) })).sort((a, b) => a.d - b.d);
+    const hazard = $("hazard").value;
+    const relevant = hazard.includes("Fire") ? ["fire", "general", "shelter", "medical"]
+      : hazard.includes("Flood") ? ["flood", "general", "shelter", "medical"]
+      : hazard.includes("Medical") ? ["medical", "general"]
+      : hazard.includes("Food") ? ["relief", "general", "shelter"]
+      : hazard.includes("Structural") ? ["rescue", "medical", "general", "shelter"]
+      : ["general", "shelter", "medical", "fire", "flood", "relief"];
+    list = list.filter(s => s.hazards.some(type => relevant.includes(type)));
+    if (has) list = list.map(s => ({ ...s, d: Number.isFinite(s.lat) && Number.isFinite(s.lon) ? km(lat, lon, s.lat, s.lon) : undefined })).sort((a, b) => (a.d ?? Infinity) - (b.d ?? Infinity));
     el.innerHTML = list.map((s, i) => {
       const contact = s.phone
-        ? `<div class="facility-phone">${s.direct_phone ? "" : "No direct site number · "}<a href="tel:${encodeURIComponent(s.phone.replace(/[^+\d]/g, ""))}" aria-label="Call ${esc(s.phone_label || s.name)} at ${esc(s.phone)}">☎ ${esc(s.phone)}</a><small>${esc(s.phone_label || "Call")}</small></div>`
+        ? `<div class="facility-phone">${s.direct_phone ? "" : "No direct site number · "}<a href="tel:${encodeURIComponent(s.phone.replace(/[^+\d]/g, ""))}" aria-label="Call ${esc(s.phone_label || s.name)} at ${esc(s.phone)}">☎ ${esc(s.phone)}</a><small>${esc(s.phone_label || "Call")}</small>${s.source ? `<a class="facility-source" href="${esc(s.source)}" target="_blank" rel="noopener">Official listing ↗</a>` : ""}</div>`
         : `<span class="facility-phone unavailable">Direct phone not listed · <a href="tel:112">Emergency: 112</a></span>`;
-      return `<div class="shelter" data-place="${i}" data-lat="${s.lat}" data-lon="${s.lon}" data-name="${esc(s.name)}"><span class="shelter-info"><b>${esc(s.name)}</b><small>${esc(s.type)} · capacity ${s.capacity}</small>${contact}</span>
+      return `<div class="shelter" data-place="${i}" data-lat="${s.lat ?? ""}" data-lon="${s.lon ?? ""}" data-name="${esc(s.name)}" data-location="${esc(s.location || s.name)}"><span class="shelter-info"><b>${esc(s.name)}</b><small>${esc(s.type)} · ${esc(s.location || `capacity ${s.capacity}`)}</small>${contact}</span>
       <span class="shelter-distance">${s.d !== undefined ? s.d.toFixed(1) + " km" : "–"}<button type="button" class="map-link show-map">View map ↗</button></span></div>`;
     }).join("");
     el.querySelectorAll(".show-map").forEach(button => button.addEventListener("click", () => {
       const row = button.closest(".shelter");
-      const { lat, lon, name } = row.dataset;
-      $("nearby-map").src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
-      $("map-title").textContent = name; $("map-caption").textContent = `${lat}, ${lon} · ${row.querySelector(".shelter-info small").textContent}`;
+      const { lat, lon, name, location } = row.dataset;
+      const destination = lat && lon ? `${lat},${lon}` : `${name}, ${location}, Ranchi`;
+      $("nearby-map").src = `https://maps.google.com/maps?q=${encodeURIComponent(destination)}&z=15&output=embed`;
+      const origin = $("lat").value && $("lon").value ? `&origin=${encodeURIComponent(`${$("lat").value},${$("lon").value}`)}` : "";
+      $("map-directions").href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}${origin}`;
+      $("map-directions").hidden = false;
+      $("map-title").textContent = name; $("map-caption").textContent = `${location} · ${row.querySelector(".shelter-info small").textContent}`;
+      document.querySelector(".map-wrap").scrollIntoView({ behavior: "smooth", block: "center" });
     }));
-  } catch { el.textContent = "Shelter list unavailable."; }
+  } catch { el.textContent = "Nearby help list unavailable."; }
 }
 
 /* ---------- Trusted contacts ---------- */
@@ -170,7 +183,7 @@ if (page === "citizen") {
   $("add-contact").addEventListener("click", () => { $("contact-form").hidden = false; $("relative-name").focus(); });
   $("cancel-contact").addEventListener("click", () => { $("contact-form").reset(); $("contact-form").hidden = true; });
   $("contact-form").addEventListener("submit", e => { e.preventDefault(); const phone = $("relative-phone").value.trim(); if (phone.replace(/\D/g, "").length < 5) return toast("Enter a valid phone number."); let contacts = []; try { contacts = JSON.parse(localStorage.getItem(CONTACTS_KEY) || "[]"); } catch {} contacts.push({ name: $("relative-name").value.trim(), phone }); localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); e.currentTarget.reset(); e.currentTarget.hidden = true; renderContacts(); toast("Trusted contact saved on this device."); });
-  ["lat", "lon"].forEach(i => $(i).addEventListener("change", renderShelters));
+  ["lat", "lon", "hazard"].forEach(i => $(i).addEventListener("change", renderShelters));
   renderContacts(); updateStatus(); renderShelters(); getGPS(); syncQueue();
 } else {
   $("reload").addEventListener("click", loadDashboard);
